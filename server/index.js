@@ -26,44 +26,52 @@ db.connect(err => {
 });
 
 // Registro de usuario
-app.post('/Register', async (req, res) => {
+app.post('/users/register', async (req, res) => {
   const { nombre, apellido, email, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10); // Encripta la contraseña
+  if (!nombre || !apellido || !email || !password) {
+    return res.status(400).json({ message: 'Todos los campos son obligatorios' });
+  }
 
+  const hashedPassword = await bcrypt.hash(password, 10);
   const sql = 'INSERT INTO users (nombre, apellido, email, password) VALUES (?, ?, ?, ?)';
+
   db.query(sql, [nombre, apellido, email, hashedPassword], (err, result) => {
     if (err) {
-      console.error(err); // Log de error
-      return res.status(500).send({ message: 'Error en el registro' });
+      console.error(err);
+      return res.status(500).json({ message: 'Error en el registro' });
     }
-    res.status(201).send({ message: 'Usuario registrado' });
+    res.status(201).json({ message: 'Usuario registrado' });
   });
 });
 
 // Login de usuario
-app.post('/login', (req, res) => {
+app.post('/users/login', (req, res) => {
   const { email, password } = req.body;
-  const sql = 'SELECT * FROM users WHERE email = ?';
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email y contraseña son obligatorios' });
+  }
 
+  const sql = 'SELECT * FROM users WHERE email = ?';
   db.query(sql, [email], async (err, results) => {
     if (err) {
-      console.error(err); // Log de error
-      return res.status(500).send({ message: 'Error en el inicio de sesión' });
+      console.error(err);
+      return res.status(500).json({ message: 'Error en el inicio de sesión' });
     }
 
     if (results.length > 0) {
       const user = results[0];
-      const match = await bcrypt.compare(password, user.password); // Compara contraseñas
+      const match = await bcrypt.compare(password, user.password);
       if (match) {
-        res.send({ success: true });
+        res.status(200).json({ success: true, message: 'Inicio de sesión exitoso' });
       } else {
-        res.send({ success: false, message: 'Contraseña incorrecta' });
+        res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
       }
     } else {
-      res.send({ success: false, message: 'Usuario no encontrado' });
+      res.status(404).json({ success: false, message: 'Usuario no encontrado' });
     }
   });
 });
+
 
 // Iniciar el servidor
 app.listen(4000, () => {
