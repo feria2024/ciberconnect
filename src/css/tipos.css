@@ -1,0 +1,20 @@
+.container{
+    text-align: center;
+    background: rgb(3,54,73);
+    background: linear-gradient(68deg, rgba(3,54,73,1) 0%, rgba(3,54,73,1) 0%, rgba(3,58,75,1) 0%, rgba(3,38,62,1) 25%, rgba(3,76,86,1) 25%, rgba(3,74,85,1) 25%, rgba(3,80,88,1) 25%, rgba(3,89,93,1) 50%, rgba(3,67,80,1) 51%, rgba(3,101,100,1) 51%, rgba(3,45,66,1) 75%, rgba(3,53,71,1) 75%, rgba(3,53,71,1) 100%, rgba(3,53,71,1) 100%, rgba(3,53,71,1) 100%);
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+}
+.container .tite{
+    padding-top:100px;
+    margin-bottom: 0;
+    padding-bottom: 20px;
+    font-size: 80px;
+}
+body{
+    background: rgb(3,54,73);
+    background: linear-gradient(68deg, rgba(3,54,73,1) 0%, rgba(3,54,73,1) 0%, rgba(3,58,75,1) 0%, rgba(3,38,62,1) 25%, rgba(3,76,86,1) 25%, rgba(3,74,85,1) 25%, rgba(3,80,88,1) 25%, rgba(3,89,93,1) 50%, rgba(3,67,80,1) 51%, rgba(3,101,100,1) 51%, rgba(3,45,66,1) 75%, rgba(3,53,71,1) 75%, rgba(3,53,71,1) 100%, rgba(3,53,71,1) 100%, rgba(3,53,71,1) 100%);
+}

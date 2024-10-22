@@ -1,0 +1,34 @@
+.herramientas{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.proyecto h1{
+    font-size: 60px;
+    margin-top: 120px;
+    text-align: center;
+}
+.herramientas h2{
+    font-size: 40px;
+}
+.herramientas h4 {
+    font-size: 30px;
+    text-align: center;
+}
+.herramientas p , .presentacion p{
+    font-size: 25px;
+
+}
+.herramientas img{
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.homecontainer-proyecto{
+    margin: 8px;
+}

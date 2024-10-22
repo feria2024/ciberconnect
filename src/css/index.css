@@ -1,0 +1,83 @@
+.principal p,.principal h2,.principal h4{
+    margin: auto;
+    font-size: 20px;
+    text-align: center;
+    font-family: sans-serif;
+    color: white;
+  }
+  .principal{
+    text-align: center;
+    font-size: 30px;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  img{
+    width: 100%;
+    height: auto;
+    max-width: 1200px;
+  }
+  .buttons{
+    display: flex;
+    flex-direction: row;
+    align-content:center;
+    justify-content: center;
+    margin: auto;
+    padding: 2%;
+  }
+  .buttons :hover{
+    text-decoration: underline;
+    color: rgba(9, 48, 39, 0.612);
+  }
+  .button {
+    --timing: linear(0, 0.3, 0.75, 1);
+  
+    padding: 1rem 2rem;
+    background: none;
+    color: #fff;
+    border-image-repeat: 80px;
+    border-image-source: conic-gradient(from var(--a),#e2ceae, #b39457, hsl(0, 0%, 0%));
+    border-image-slice: 1 1 1 1;
+    border-image-width: 0.25rem;
+    width: 120px;
+    animation: move 1.6s infinite var(--timing);
+  
+    margin: 40px 10px 0 0;
+    &.fill {
+      border-image-slice: 1 1 1 1 fill;
+    }
+  }
+  
+  @keyframes move {
+    from { --a: 0deg; }
+    to { --a: 360deg; }
+  }
+  
+  @property --a {
+    syntax: "<angle>";
+    inherits: true;
+    initial-value: 0deg;
+  }
+  h3{
+    text-align: center;
+  }
+  @media (max-width: 768px) {
+    .buttons {
+      flex-direction: column; /* Los botones se alinearán en una columna en lugar de en fila */
+      justify-content: center; /* Asegura que estén centrados */
+      align-items: center; /* Centra también verticalmente */
+    }
+    
+    .button {
+      width: 80%; /* Los botones ocuparán el 80% del ancho disponible */
+      padding: 0.8rem 1.5rem; /* Reduce ligeramente el padding */
+    }
+    .home img{
+      top: 0;
+      width: 100%;
+      height: auto;
+      max-width: 480px;
+    }
+  }
+  
