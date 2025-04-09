@@ -1,60 +1,59 @@
-// Importa las librerías necesarias
 const express = require('express');
-const mysql = require('mysql');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const app = express();
-require('dotenv').config(); // Para manejar variables de entorno
+const { createClient } = require('@supabase/supabase-js');
+require('dotenv').config();
 
-// Middleware
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Configuración de la base de datos
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '0000',
-  database: 'redes',
-  port: '3307',
-});
-
-// Conexión a la base de datos
-db.connect(err => {
-  if (err) throw err;
-  console.log('Conectado a MySQL');
-});
+// Configurar Supabase
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
 
 // Registro de usuario
 app.post('/Register', async (req, res) => {
   const { nombre, apellido, email, password } = req.body;
-  const sql = 'INSERT INTO users (nombre, apellido, email,password) values(?,?,?,?)';
-  db.query(sql, [nombre, apellido , email, password], (err, result) => {
-    if (err) throw err;
-    res.send({ message: 'Usuario registrado' });
-  });
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const { data, error } = await supabase
+    .from('users')
+    .insert([{ nombre, apellido, email, password: hashedPassword }]);
+
+  if (error) {
+    console.error(error);
+    return res.status(500).send({ message: 'Error al registrar usuario' });
+  }
+
+  res.send({ message: 'Usuario registrado correctamente' });
 });
 
 // Login de usuario
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  const sql = 'SELECT * FROM users WHERE email = ? AND password = ?';
-  db.query(sql, [email, password], (err, result) => {
-    if (err) throw err;
-    if (result.length > 0) {
-        res.send({ success: true });
-      } else {
-      res.send({ success: false });
-    }
-  });
+
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('email', email)
+    .single();
+
+  if (error || !data) {
+    return res.send({ success: false, message: 'Correo no encontrado' });
+  }
+
+  const match = await bcrypt.compare(password, data.password);
+  if (!match) {
+    return res.send({ success: false, message: 'Contraseña incorrecta' });
+  }
+
+  res.send({ success: true, user: { id: data.id, nombre: data.nombre, email: data.email } });
 });
 
-// Iniciar el servidor
+// Iniciar servidor
 app.listen(3000, () => {
   console.log('Servidor corriendo en http://localhost:3000');
-});
-
-db.query('SELECT 1 + 1 AS result', (err, results) => {
-    if (err) throw err;
-    console.log('Query result:', results[0].result); // Debería imprimir 2
 });
